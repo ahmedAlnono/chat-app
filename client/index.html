@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alnono Chat</title>
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    *::selection{
+        background-color:yellow;
+        color:black;
+    }
+    *::-webkit-scrollbar{
+        width:3px;
+    }
+    *::-webkit-scrollbar-track-piece{
+        background-color: rgb(211, 203, 203);
+        width:3px;
+    }
+    *::-webkit-scrollbar-thumb{
+        background-color: rgb(143, 161, 211);
+        
+    }
+        body{
+            margin:0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            /* width:90%; */
+            /* overflow: hidden; */
+        }
+        #message-container{
+            /* margin:10px; */
+            border: 1px solid black;
+            flex-grow:1;
+            overflow-y:auto;
+            height: 80%;
+            display:flex;
+            flex-direction: column;
+        }
+        #message-container div{
+            padding:5px;
+        }
+        form{
+            display:flex;
+            /* padding:20px 0; */
+            width:80vw;
+            flex-direction: column;
+        }
+        form input{
+            padding:5px;
+            font-size:17px;
+            width:85%;
+        }
+
+        form button{
+            background-color: blue;
+            color:white;
+            border:1px solid white;
+            padding:7px;
+            font-size:17px;
+            min-width:12%;
+            cursor: pointer;
+        }
+        form button:active , form button:hover{
+            color:blue;
+            background-color:white;
+            border-color:blue;
+        }
+        .login{
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: aquamarine;
+            padding:80px 0;
+            text-align: center;
+            border-radius: 30px;
+            width:90%;
+            margin:auto;
+        }
+        .login h1{
+            font-family:Arial, Helvetica, sans-serif
+        }
+        .login form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .login form button{
+            max-width:60px;
+            min-width: fit-content;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+        .login form input{
+            width:40%;
+            margin:5px;
+            font-size:20px;
+        }
+        .chats{
+            height: 100vh;
+            display:none;
+            flex-direction: row;
+        }
+        .chat-messages{
+            height: 100%;
+            width:80%;
+        }
+        
+        .chat-users{
+            background-color: aquamarine;
+            width:30%;
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top:20px;
+            gap:10px;
+            height: 77vh;
+            overflow-y: auto;
+        }
+        .chat-users div{
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: aqua;
+            width:90%;
+            width:100%;
+            background-color: aqua;
+            text-align: center;
+            cursor:pointer;
+        }
+        .chat-users input{
+            width:90%;
+            padding:2px;
+        }
+        /* .chat-users div:hover , .chat-users div:active{
+            background-color: cornflowerblue;
+        } */
+        .chat-users .active{
+            background-color:cornflowerblue;
+        }
+        .chat-users[aria-expanded=true]{
+            display:flex;
+        }
+        .show-users{
+            display: none;
+        }
+        .chat-users::selection{
+                background-color: white;
+            }
+            @media only screen and (max-width:768px){
+                form input{
+                    width:75%;
+                }
+                form button{
+                    min-width:60px;
+                }
+                .chat-messages{
+                    width:70%;
+                }
+                .chat-users{
+                    width:30%;
+                }
+            }
+            @media only screen and (max-width: 480px) {
+                .chat-messages form{
+                    width:100%;
+                }
+                .chat-messages form input{
+                    width:75%;
+                }
+                .chat-messages form button{
+                    width:15%;
+                }
+                body{
+                    width:100%;
+                }
+                .chat-users[aria-expanded=false]{
+                    display:none;
+                }
+                .chat-users[aria-expanded=true]{
+                    position:absolute;
+                    right: 0;
+                    z-index:1;
+                    display:flex;
+                    height: 60vh;
+                    overflow-y: auto;
+                    width:fit-content;
+                }
+                .chat-messages{
+                    width:100%;
+                }
+                .show-users{
+                    width:fit-content;
+                    height: fit-content;
+                    display:flex;
+                    flex-direction: column;
+                    gap:0;
+                    position:absolute;
+                    top:-5px;
+                    right:10px;
+                    cursor: pointer;
+                    scale: 2;
+                    animation-duration: 400ms;
+                    animation-timing-function: ease;
+                    z-index: 3;
+                }
+                .show-users span{
+                    line-height: 3px;
+                    font-weight: bold;
+                }
+                .chat-messages{
+                    width:100%;
+                }
+            }
+            @keyframes scale {
+                0%{
+                    scale:2;
+                }
+                50%{
+                    scale:2.5;
+                }
+                100%{
+                    scale:2;
+                }
+            }
+            </style>
+</head>
+<body>
+    <div class="login">
+        <h1>Wellcome to our Chat App</h1>
+        <form id="login">
+            <input type="text" name="name" placeholder="Name...">
+            <input type="email" name="email" placeholder="Email...">
+            <input type="password" name="password" placeholder="password...">
+            <button type="submit" id="login-btn">Submit</button>
+        </form>
+    </div>
+    <div class="chats">
+        <div class="chat-messages">
+            <div id="message-container"></div>
+                <form action="" id ="form-message">
+                    <div>
+                        <input type="text" id="message-input" placeholder="Message....">
+                        <button type="submit" id="send-button">Send</button>
+                    </div>
+                    <div>
+                        <input type="text" id="room-input" placeholder="Room">
+                        <button type="button" id="room-button">Join</button>
+                    </div>
+                </form>
+        </div>
+            <div class="chat-users" aria-expanded="false">
+                <input type="text" name="search" placeholder="search">
+                <!-- <div id="ahmed@gmail.com" class="active">
+                    ahmed <br>
+                    ahmed@gmail.com
+                </div>
+                <div id="ali@gmail.com">
+                    <span>Ali</span>
+                    <span>ali@gmail.com</span>
+                </div>
+                <div id="ameer@gmail.com">
+                    <span>ameer</span>
+                    <span>ameer@gmail.com</span>
+                </div> -->
+            </div>
+            <div class="show-users">
+                <span>_</span>
+                <span>_</span>
+                <span>_</span>
+            </div>
+    </div>
+</body>
+<script type="module" src="script.js"></script>
+</html>
