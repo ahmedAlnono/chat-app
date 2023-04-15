@@ -149,8 +149,6 @@ joinRoomButton.addEventListener("click" , function(){
             "center")
     });
 })
-
-// login  ****************
 if(
     window.localStorage.getItem("name") != null&&
     window.localStorage.getItem("email") != null&&

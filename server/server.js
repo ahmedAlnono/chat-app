@@ -1,7 +1,7 @@
 const {instrument} = require("@socket.io/admin-ui");
 const mongoose = require("mongoose");
-const User = require("../User");
-const Chat = require("../Chat");
+const User = require("./User");
+const Chat = require("./Chat");
 
 mongoose.connect("mongodb://localhost:27017/myChat" , { useNewUrlParser: true });
 mongoose.set('strictQuery', true);
@@ -40,7 +40,6 @@ io.on("connection" , async function(socket){
             if(room == ""){
                 socket.broadcast.emit("receive-message", message);
                 await chat.save().then(()=>{
-                    console.log("new chat saved")
                 })
             }else{
                 socket.to(room).emit("receive-message", message);
@@ -59,9 +58,7 @@ io.on("connection" , async function(socket){
                         $push:{messages:message}
                     } ,{} , function(error , sucsses){
                         if(error){
-                            console.log(error)
                         }else{
-                            console.log(sucsses);
                             socket.broadcast.emit("receive-message" , message);
                         }
                     })
