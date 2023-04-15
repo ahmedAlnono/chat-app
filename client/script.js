@@ -1,6 +1,7 @@
 import {io} from "socket.io-client";
 
 // declear all variable
+// const sendMessageButton = document.querySelector("#send-button");
 const joinRoomButton = document.querySelector("#room-button");
 const messageInput = document.querySelector("#message-input");
 const roomInput = document.querySelector("#room-input");
@@ -149,6 +150,8 @@ joinRoomButton.addEventListener("click" , function(){
             "center")
     });
 })
+
+// login  ****************
 if(
     window.localStorage.getItem("name") != null&&
     window.localStorage.getItem("email") != null&&

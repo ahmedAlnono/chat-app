@@ -37,13 +37,10 @@ io.on("connection" , async function(socket){
                 users:[email , otherEmail],
                 messages:[message]
             })
-            if(room == ""){
                 socket.broadcast.emit("receive-message", message);
                 await chat.save().then(()=>{
+                    console.log("new chat saved")
                 })
-            }else{
-                socket.to(room).emit("receive-message", message);
-            }
         }else{
             Chat.findOneAndUpdate({users:[
                 `${email}`,
@@ -58,7 +55,9 @@ io.on("connection" , async function(socket){
                         $push:{messages:message}
                     } ,{} , function(error , sucsses){
                         if(error){
+                            console.log(error)
                         }else{
+                            console.log(sucsses);
                             socket.broadcast.emit("receive-message" , message);
                         }
                     })
@@ -99,6 +98,10 @@ io.on("connection" , async function(socket){
         await newUser.save().then(()=>{
             console.log("user saved")
         })
+    })
+    socket.on("search-user" , async function(user){
+        let users = await User.findeByName(user);
+        socket.emit("render-users" , users);
     })
 })
 instrument(io , {auth:false})
